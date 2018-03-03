@@ -1,6 +1,6 @@
 # Q1 #
 ## Execution ##
-With Python 2 or 3 environment configured in your device, cd to folder ex1, and make sure both ex1.py and input file exists, then run command:  
+With Python 2 or 3 environment configured in your device, cd to folder ex1, and make sure both ex1.py and input file exist, then run command:  
 `python ex1.py input.txt`  
 The result will look like this:  
 ```
@@ -51,7 +51,7 @@ When the number of records become large, we may adopt Map Reduce idea to achieve
 
 # Q2 Python MapReduce #
 ## Execution ##
-With Python 2 or 3 environment configured in your device, cd to folder ex2, and make sure both ex2.py and input file exists, then run command:  
+With Python 2 or 3 environment configured in your device, cd to folder ex2, and make sure both ex2.py and input file exist, then run command:  
 `python ex2.py input.txt`  
 The result will look like this:  
 ```

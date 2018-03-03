@@ -14,18 +14,17 @@ sports.yahoo.com 2
 www.cnn.com 1
 08/10/2014 GMT
 www.twitter.com 1
-
 ```  
 ## Analysis ##
 ### Time Complexity ###
 Suppose input file contains `N` lines of record, and for each date, there are on average `M` distinct URLs, and there are `K` distinct dates.  
-1) Iterate through each line and create dictionary: O(N)  
-2) Sort URL within each date by frequency: O(MlogM)  
-3) Sort dates: O(KlogK)  
-Total: O(N + MlogM + KlogK)  
+1) Iterate through each line and create dictionary: `O(N)`  
+2) Sort URL within each date by frequency: `O(MlogM)`    
+3) Sort dates: `O(KlogK)`  
+Total: `O(N + MlogM + KlogK)`  
 
 ### Space Complexity ###
-Space cost somes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is O(N).  
+Space cost somes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is `O(N)`.  
 
 ## Improvements ##
 ### URL lookup ###
@@ -37,7 +36,6 @@ www.facebook.com 2
 www.facebook.com 3
 08/10/2014 GMT
 www.facebook.com 1
-
 ``` 
 According to the method previously described, the facebook URL will be stored three times (within each date). So when the system scales up, lots of space would be wasted due to such kind of duplication.  
 We can create a URL lookup table (dictionary) with keys as URL string and values as integer URL ID, with URL ID auto incrementing when seeing a new URL. So we only need to store integer URL ID within our running dictionary.  

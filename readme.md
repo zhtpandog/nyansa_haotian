@@ -105,7 +105,7 @@ Calculate the sum and count for each id:
  '4.4.4.4': ['iphone', 10, 1]}
 ```
 ### Phase 2 Map ###
-Generate following maps:
+If sum / count <= 50, then poor = True. Generate following maps:
 ```
 [('android', False, 0, 0),
  ('iphone', True, 0, 0),

@@ -1,3 +1,7 @@
+# Summary #
+Q1 is completed using Python. Complexity analysis and improvements for conditions like big data, partially sorted data source, and MapReduce scaling up are dicussed.  
+Q2 is completed using both Python native `map`, `reduce` function, and Spark in two separate files. All codes are runnable and tested. Detailed process walk-through is offered in readme.  
+
 # Q1 #
 ## Execution ##
 With Python 2 or 3 environment configured in your device, `cd` to folder `ex1`, and make sure both `ex1.py` and `input.txt` exist, then run command:  
@@ -40,7 +44,7 @@ www.facebook.com 1
 According to the method previously described, the facebook URL will be stored three times (within each date). So when the system scales up, lots of space would be wasted due to such kind of duplication.  
 We can create a URL lookup table (dictionary) with keys as URL string and values as integer URL ID, with URL ID auto incrementing when seeing a new URL. So we only need to store integer URL ID within our running dictionary.  
 
-### Streaming data time windowing ###
+### Time windowing ###
 In a real-world system, the input records could be partially sorted, which means records are clustered within a short time window. For example, records within a week are not sorted, but records from different weeks are bot blended with each other. If this is the case, we do not need to cache all the data, or sort dates from MIN_DATE to MAX_DATE in record. We can segment data by time window (e.g. week), and process data within each segment, with data from other segments persisting in disk.  
 
 ### Scaling up ###

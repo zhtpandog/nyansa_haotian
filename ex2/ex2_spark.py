@@ -13,21 +13,28 @@ def map_phase_2(record):
 def map_phase_3(record):
     return record[0], float(record[1][1]) / record[1][0]
 
-sc = SparkContext(appName="nyansa_haotian")
+if __name__ == "__main__":
 
-source = sc.textFile("input.txt")
+    if len(sys.argv) != 2:
+        print("Please offer input file name and put it in the same folder as this script.")
+        exit(1)
 
-phase1_rdd = source.map(map_phase_1).aggregateByKey((0, 0, None), lambda u,v: (u[0] + v[1], u[1] + 1, v[0]), lambda u1, u2: (u1[0] + u2[0], u1[1] + u2[1], v[0]))
-phase2_rdd = phase1_rdd.map(map_phase_2).aggregateByKey((0, 0), lambda u, v: (u[0] + 1, u[1] + v), lambda u1, u2: (u1[0] + u2[0], u1[1] + u2[1], v[0]))
-result = phase2_rdd.map(map_phase_3).collect()
-result.sort(key=lambda x: x[1], reverse=True)
+    sc = SparkContext(appName="nyansa_haotian")
 
-highest_ratio = result[0][1]
-for i in result:
-    if i[1] == highest_ratio:
-        print (i[0])
-    else:
-        break
+    file_name = sys.argv[1]
+    source = sc.textFile(file_name)
+
+    phase1_rdd = source.map(map_phase_1).aggregateByKey((0, 0, None), lambda u,v: (u[0] + v[1], u[1] + 1, v[0]), lambda u1, u2: (u1[0] + u2[0], u1[1] + u2[1], v[0]))
+    phase2_rdd = phase1_rdd.map(map_phase_2).aggregateByKey((0, 0), lambda u, v: (u[0] + 1, u[1] + v), lambda u1, u2: (u1[0] + u2[0], u1[1] + u2[1], v[0]))
+    result = phase2_rdd.map(map_phase_3).collect()
+    result.sort(key=lambda x: x[1], reverse=True)
+
+    highest_ratio = result[0][1]
+    for i in result:
+        if i[1] == highest_ratio:
+            print(i[0])
+        else:
+            break
 
 
 

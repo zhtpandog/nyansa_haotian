@@ -1,6 +1,6 @@
 # Q1 #
 ## Execution ##
-With Python 2 or 3 environment configured in your device, cd to folder ex1, and make sure both ex1.py and input file exist, then run command:  
+With Python 2 or 3 environment configured in your device, `cd` to folder `ex1`, and make sure both `ex1.py` and `input.txt` exist, then run command:  
 `python ex1.py input.txt`  
 The result will look like this:  
 ```
@@ -51,7 +51,7 @@ When the number of records become large, we may adopt Map Reduce idea to achieve
 
 # Q2 Python MapReduce #
 ## Execution ##
-With Python 2 or 3 environment configured in your device, cd to folder ex2, and make sure both ex2.py and input file exist, then run command:  
+With Python 2 or 3 environment configured in your device, `cd` to folder `ex2`, and make sure both `ex2.py` and `input.txt` exist, then run command:  
 `python ex2.py input.txt`  
 The result will look like this:  
 ```
@@ -135,6 +135,79 @@ iphone
 ```
 
 # Q2 Spark MapReduce #
+## Execution ##
+The code is tested on Spark version 2.1.0, with Python 2.7.  
+cd to folder `ex2`, and make sure both `ex2_spark.py` and `input.txt exist`, then run command:  
+`spark-submit ex2_spark.py input.txt`  
+The result will look like this:  
+`iphone`  
+
+## Example walk through ##
+Given input:  
+```
+X1 = {"1.1.1.1", "android", 20}
+X2 = {"1.1.1.1", "android", 100}
+X3 = {"2.2.2.2", "iphone", 10}
+X4 = {"2.2.2.2", "iphone", 20}
+X5 = {"3.3.3.3", "android", 10}
+X6 = {"3.3.3.3", "android", 40}
+X7 = {"3.3.3.3", "android", 10}
+```
+### Phase 1 Map ###
+Process the input and generate following maps:  
+```
+[(u'1.1.1.1', u'android', 20), 
+(u'1.1.1.1', u'android', 100), 
+(u'2.2.2.2', u'iphone', 10), 
+(u'2.2.2.2', u'iphone', 20), 
+(u'3.3.3.3', u'android', 10), 
+(u'3.3.3.3', u'android', 40), 
+(u'3.3.3.3', u'android', 10), 
+(u'4.4.4.4', u'iphone', 10)]
+```
+### Phase 1 aggregateByKey ###
+Calculate the sum and count for each id:  
+```
+[(u'3.3.3.3', (60, 3, u'android')), 
+(u'4.4.4.4', (10, 1, u'iphone')), 
+(u'1.1.1.1', (120, 2, u'android')), 
+(u'2.2.2.2', (30, 2, u'iphone'))]
+```
+### Phase 2 Map ###
+If sum / count <= 50, then poor = True. Generate following maps:
+```
+[(u'android', True), 
+(u'iphone', True), 
+(u'android', False), 
+(u'iphone', True)]
+```
+### Phase 2 aggregateByKey ###
+For each device_type, calculate total number of devices and poor devices:  
+```
+[(u'android', (2, 1)), 
+(u'iphone', (2, 2))]
+```
+### Phase 3 Map ###
+Calculate poor-ratio for each device_type:  
+```
+[(u'android', 0.5), 
+(u'iphone', 1.0)]
+```
+### Produce Result ###
+Sort by poor ratio from high to low. Output device(s) with highest poor-ratio:  
+```
+iphone
+```
+
+
+
+
+
+
+
+
+
+
 
 
 

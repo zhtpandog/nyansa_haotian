@@ -4,7 +4,7 @@ import sys
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
-        print ("Please offer input file name and put it in the same folder as this script.")
+        print("Please offer input file name and put it in the same folder as this script.")
         exit(1)
 
     file_name = sys.argv[1]
@@ -33,8 +33,8 @@ if __name__ == "__main__":
 
     # print result
     for ts, web_list in ts_n_web_count:
-        print (time.strftime("%m/%d/%Y", time.strptime(ts, "%Y%m%d")) + " " + "GMT")
+        print(time.strftime("%m/%d/%Y", time.strptime(ts, "%Y%m%d")) + " " + "GMT")
         for web, count in web_list:
-            print (web + " " + str(count))
+            print(web + " " + str(count))
 
 

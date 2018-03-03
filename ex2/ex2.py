@@ -2,6 +2,7 @@ from functools import reduce
 import sys
 
 if __name__ == "__main__":
+    
     def map_phase_1(record):
         id, device_type, score = record.rstrip('}').split(" = ")[1].lstrip("{").replace('''"''', "").replace(" ", "").split(",")
         return id, device_type, int(score), 1
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         return record[0], float(record[1][2]) / record[1][1]
 
     if len(sys.argv) != 2:
-        print ("Please offer input file name and put it in the same folder as this script.")
+        print("Please offer input file name and put it in the same folder as this script.")
         exit(1)
 
     file_name = sys.argv[1]
@@ -40,11 +41,11 @@ if __name__ == "__main__":
     with open(file_name) as f:
         input_str = f.read().split("\n")
 
-    print ("file loaded")
+    print("file loaded")
 
     mapped = map(map_phase_1, input_str)
 
-    print ("phase 1 map finished")
+    print("phase 1 map finished")
 
     # group by key (shuffling) 1
     group = {}
@@ -58,12 +59,12 @@ if __name__ == "__main__":
     for id in group:
         group[id] = reduce(reduce_phase_1, group[id])
 
-    print ("phase 1 reduce finished")
+    print("phase 1 reduce finished")
 
     # map 2
     mapped2 = map(map_phase_2, group.items())
 
-    print ("phase 2 map finished")
+    print("phase 2 map finished")
 
     # group by key (shuffling) 2
     group2 = {}
@@ -77,13 +78,13 @@ if __name__ == "__main__":
     for device_type in group2:
         group2[device_type] = reduce(reduce_phase_2, group2[device_type])
 
-    print ("phase 2 reduce finished")
+    print("phase 2 reduce finished")
 
     # map 3
     mapped3 = list(map(map_phase_3, group2.items()))
 
-    print ("phase 3 map finished")
-    print ("result: ")
+    print("phase 3 map finished")
+    print("result: ")
 
     # produce result
     mapped3.sort(key=lambda x: x[1], reverse=True)
@@ -91,6 +92,6 @@ if __name__ == "__main__":
     highest_ratio = mapped3[0][1]
     for i in mapped3:
         if i[1] == highest_ratio:
-            print (i[0])
+            print(i[0])
         else:
             break

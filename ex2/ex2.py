@@ -12,9 +12,8 @@ if __name__ == "__main__":
 
 
     def map_phase_2(record):
-        id = record[0]
         device_type, total, count = record[1][0], record[1][1], record[1][2]
-        return device_type, True if total / count <= 50 else False, 0, 0
+        return device_type, True if float(total) / count <= 50 else False, 0, 0
 
     def reduce_phase_2(record1, record2):
         poor1, count11, count12 = record1[0], record1[1], record1[2]
@@ -29,7 +28,7 @@ if __name__ == "__main__":
 
 
     def map_phase_3(record):
-        return record[0], record[1][2] / record[1][1]
+        return record[0], float(record[1][2]) / record[1][1]
 
     if len(sys.argv) != 2:
         print ("Please offer input file name and put it in the same folder as this script.")

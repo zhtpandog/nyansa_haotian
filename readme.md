@@ -1,6 +1,6 @@
 # Summary #
 Q1 is completed using Python. Complexity analysis and improvements for conditions like big data, partially sorted data source, and MapReduce scaling up are dicussed.  
-Q2 is completed using both Python native `map`&`reduce` function, and Spark in two separate files. All codes are runnable and tested. Detailed process walk-through is offered in readme.  
+Q2 is completed using both Python (native `map`&`reduce` function) and Spark in two separate files. All codes are runnable and tested. Detailed process walk-through is offered in readme.  
 
 # Q1 #
 ## Execution ##

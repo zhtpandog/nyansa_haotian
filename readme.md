@@ -49,12 +49,92 @@ When the number of records become large, we may adopt Map Reduce idea to achieve
 2) Map each record into format ((date, url), 1)), in which different combinations of dates and urls are used as keys.  
 3) Group by key and get the counts (e.g. ((2014/08/08, www.facebook.com), 20000), URL lookup discussed above can also be used.)
 
+# Q2 Python MapReduce #
+## Execution ##
+With Python 2 or 3 environment configured in your device, cd to folder ex2, and make sure both ex2.py and input file exists, then run command:  
+`python ex2.py input.txt`  
+The result will look like this:  
+```
+file loaded
+phase 1 map finished
+phase 1 reduce finished
+phase 2 map finished
+phase 2 reduce finished
+phase 3 map finished
+result: 
+iphone
+```
 
+## Example walk through ##
+Given input:  
+```
+X1 = {"1.1.1.1", "android", 20}
+X2 = {"1.1.1.1", "android", 100}
+X3 = {"2.2.2.2", "iphone", 10}
+X4 = {"2.2.2.2", "iphone", 20}
+X5 = {"3.3.3.3", "android", 10}
+X6 = {"3.3.3.3", "android", 40}
+X7 = {"3.3.3.3", "android", 10}
+```
+### Phase 1 Map ###
+Process the input and generate following maps:  
+```
+[('1.1.1.1', 'android', 20, 1),
+ ('1.1.1.1', 'android', 100, 1),
+ ('2.2.2.2', 'iphone', 10, 1),
+ ('2.2.2.2', 'iphone', 20, 1),
+ ('3.3.3.3', 'android', 10, 1),
+ ('3.3.3.3', 'android', 40, 1),
+ ('3.3.3.3', 'android', 10, 1),
+ ('4.4.4.4', 'iphone', 10, 1)]
+```
+### Phase 1 Shuffle ###
+After grouping by id:  
+```
+{'1.1.1.1': [['android', 20, 1], ['android', 100, 1]],
+ '2.2.2.2': [['iphone', 10, 1], ['iphone', 20, 1]],
+ '3.3.3.3': [['android', 10, 1], ['android', 40, 1], ['android', 10, 1]],
+ '4.4.4.4': [['iphone', 10, 1]]}
+```
+### Phase 1 Reduce ###
+Calculate the sum and count for each id:  
+```
+{'1.1.1.1': ('android', 120, 2),
+ '2.2.2.2': ('iphone', 30, 2),
+ '3.3.3.3': ('android', 60, 3),
+ '4.4.4.4': ['iphone', 10, 1]}
+```
+### Phase 2 Map ###
+Generate following maps:
+```
+[('android', False, 0, 0),
+ ('iphone', True, 0, 0),
+ ('android', True, 0, 0),
+ ('iphone', True, 0, 0)]
+```
+### Phase 2 Shuffle ###
+After group by device_type:
+```
+{'android': [[False, 0, 0], [True, 0, 0]],
+ 'iphone': [[True, 0, 0], [True, 0, 0]]}
+```
+### Phase 2 Reduce ###
+For each device_type, calculate total number of devices and poor devices:  
+```
+{'android': (True, 2, 1), 'iphone': (True, 2, 2)}
+```
+### Phase 3 Map ###
+Calculate poor-ratio for each device_type:  
+```
+[('android', 0.5), ('iphone', 1.0)]
+```
+### Produce Result ###
+Sort by poor ratio from high to low. Output device(s) with highest poor-ratio:  
+```
+iphone
+```
 
-
-
-
-
+# Q2 Spark MapReduce #
 
 
 

@@ -1,3 +1,56 @@
+# Updates #
+## Q1 Improvemented Version ##
+### Background ###
+Cardinality (i.e. number of distinct values) of hit count values and the number of days are much smaller than the number of unique URLs.  
+So we should try to avoid sort URLs. It can be achieved using Bucket Sort.  
+### Process ###
+First, going through records line by line, and compose dictionary with structure {date: {URL: frequency}}. e.g.  
+```
+{'20140808': {'news.ycombinator.com': 1, 'www.facebook.com': 2, 'www.google.com': 2},
+ '20140809': {'sports.yahoo.com': 2, 'www.cnn.com': 1, 'www.nba.com': 3},
+ '20140810': {'www.twitter.com': 1}}
+```
+During the first pass, we also maintaining a variable recording maximum URL hits per day per URL. In the above example, it is 3.  
+Meanwhile, we initiate a placeholder dictionary for next step looks like this:  
+```
+{'20140808': [],
+ '20140809': [],
+ '20140810': []
+```
+  
+Then, we fill the empty lists in placeholder dictionary created in the previous step. The size of each list is the maximum URL hits per day per URL + 1. The __index__ is the hit frequency for the URLs fall into that slot. Since the index is ordered, we do not need to sort URLs. The outcome looks like this:  
+```
+{'20140808': [[], ['news.ycombinator.com'], ['www.facebook.com', 'www.google.com'], []],
+ '20140809': [[], ['www.cnn.com'], ['sports.yahoo.com'], ['www.nba.com']],
+ '20140810': [[], ['www.twitter.com'], [], []]}
+```
+  
+Finally, we sort the result by dates (dictionary key), and print URLs and hits from end to beginning:  
+```
+08/08/2014 GMT
+www.facebook.com 2
+www.google.com 2
+news.ycombinator.com 1
+08/09/2014 GMT
+www.nba.com 3
+sports.yahoo.com 2
+www.cnn.com 1
+08/10/2014 GMT
+www.twitter.com 1
+```  
+### Time Complexity ###
+Suppose input file contains `N` lines of record, and for each date, there are on average `M` distinct URLs, and there are `K` distinct dates.  
+1) Iterate through each line and create dictionary: `O(N)`  
+2) Put URL in correct indices based on frequency: `O(M)`   
+3) Sort dates: `O(KlogK)`  
+Total: `O(N + M + KlogK)`  
+
+### Space Complexity ###
+Space cost comes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is `O(N)`.  
+
+### Conclusion ###
+This method takes advantage of the assumption and achieving performance boost by not sorting URLs.  
+
 # Summary #
 Q1 is completed using Python. Complexity analysis and improvements for conditions like big data, partially sorted data source, and MapReduce scaling up are dicussed.  
 Q2 is completed using both Python (native `map`&`reduce` function) and Spark in two separate files. All codes are runnable and tested. Detailed process walk-through is offered in readme.  
@@ -28,7 +81,7 @@ Suppose input file contains `N` lines of record, and for each date, there are on
 Total: `O(N + MlogM + KlogK)`  
 
 ### Space Complexity ###
-Space cost somes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is `O(N)`.  
+Space cost comes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is `O(N)`.  
 
 ## Improvements ##
 ### URL lookup ###

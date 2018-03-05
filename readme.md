@@ -48,6 +48,10 @@ Total: `O(N + M + KlogK)`
 ### Space Complexity ###
 Space cost comes from storing records into a dictionary. In worst case (each visit within each day is distinct), it is `O(N)`.  
 
+### Tiny Further Improvements ###
+The dates can also be sorted using bucket sort by placing dates in sequential indices. This can slightly improve time complexity into `O(N + M + K)`. But since the assumption says there are much fewerer dates than URLs, this improvement is trivial.  
+Also, for space, the URL lookup idea I discussed before can also be applied.  
+
 ### Conclusion ###
 This method takes advantage of the assumption and achieving performance boost by not sorting URLs.  
 
